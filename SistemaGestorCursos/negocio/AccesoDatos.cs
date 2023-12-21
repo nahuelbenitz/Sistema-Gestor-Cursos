@@ -43,5 +43,13 @@ namespace negocio
                 throw ex;
             }
         }
+
+        public void CerrarConexion()
+        {
+            if (lector != null)
+                lector.Close();
+
+            conexion.Close();
+        }
     }
 }
