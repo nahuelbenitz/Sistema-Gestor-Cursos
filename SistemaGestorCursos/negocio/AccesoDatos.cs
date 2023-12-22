@@ -20,7 +20,7 @@ namespace negocio
 
         public AccesoDatos()
         {
-            conexion = new SqlConnection("");
+            conexion = new SqlConnection("Data Source=NOT027;Initial Catalog=CURSOS_DB;Integrated Security=True");
             comando = new SqlCommand();
         }
 
@@ -42,6 +42,26 @@ namespace negocio
             {
                 throw ex;
             }
+        }
+
+        public void EjecutarAccion()
+        {
+            comando.Connection = conexion;
+            try
+            {
+                conexion.Open();
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public void SetearParametros(string nombre, object valor)
+        {
+            comando.Parameters.AddWithValue(nombre, valor);
         }
 
         public void CerrarConexion()
