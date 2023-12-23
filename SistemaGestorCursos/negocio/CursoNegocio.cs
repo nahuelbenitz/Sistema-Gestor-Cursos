@@ -18,7 +18,7 @@ namespace negocio
 
             try
             {
-                datos.SetearConsulta(@"SELECT   cur.id,cur.nombre, cur.descripcion, est.descripcion as Estado, cur.fechafin, cate.Descripción as Categoria, cur.IdCategoria, cur.urlcertificado, emi.Descripción as Emisor, cur.IdEmisor
+                datos.SetearConsulta(@"SELECT   cur.id,cur.nombre, cur.descripcion, est.descripcion as Estado, cur.idEstado, cur.fechafin, cate.Descripción as Categoria, cur.IdCategoria, cur.urlcertificado, emi.Descripción as Emisor, cur.IdEmisor
                                         FROM Cursos cur, Categoria cate, Emisores emi, Estados est
                                         WHERE cate.Id = cur.IdCategoria 
                                         and emi.Id = cur.IdEmisor
@@ -33,6 +33,7 @@ namespace negocio
                     curso.Nombre = (string)datos.Lector["nombre"];
                     curso.Descripcion = (string)datos.Lector["descripcion"];
                     curso.Estado = new Estado();
+                    curso.Estado.Id = (int)datos.Lector["idEstado"];
                     curso.Estado.Descripcion = (string)datos.Lector["Estado"];
                     curso.FechaFin = (DateTime)datos.Lector["fechafin"];
                     curso.Categoria = new Categoria();
@@ -98,7 +99,9 @@ namespace negocio
             try
             {
                 datos.SetearConsulta(@"UPDATE Cursos SET Nombre = @nombre, Descripcion = @descripcion, FechaFin = @fechaFin, IdCategoria = @idCategoria,
-                                       UrlCertificado = @urlCertificado, IdEmisor = @idEmisor, idEstado = @idEstado");
+                                       UrlCertificado = @urlCertificado, IdEmisor = @idEmisor, idEstado = @idEstado
+                                       WHERE Id = @id");
+                datos.SetearParametros("@id", curso.Id);
                 datos.SetearParametros("@nombre", curso.Nombre);
                 datos.SetearParametros("@descripcion", curso.Descripcion);
                 datos.SetearParametros("@fechaFin", curso.FechaFin);

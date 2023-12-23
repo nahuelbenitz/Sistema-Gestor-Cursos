@@ -39,6 +39,7 @@ namespace presentacion
             {
                 if (curso == null)
                     curso = new Curso();
+
                 curso.Nombre = txtNombre.Text;
                 curso.Descripcion = txtDescripcion.Text;
                 curso.Estado = (Estado)cboEstado.SelectedItem;
@@ -85,10 +86,10 @@ namespace presentacion
 
                 if (curso != null)
                 {
-                    txtNombre.Text = curso.Nombre;
-                    txtDescripcion.Text = curso.Descripcion;
+                    txtNombre.Text = curso.Nombre.TrimEnd();
+                    txtDescripcion.Text = curso.Descripcion.TrimEnd();
                     dtpFecha.Text = curso.FechaFin.ToString();
-                    txtUrlCertificado.Text = curso.UrlCertificado;
+                    txtUrlCertificado.Text = curso.UrlCertificado.TrimEnd();
                     CargarImagen(curso.UrlCertificado);
                     cboCategoria.SelectedValue = curso.Categoria.Id;
                     cboEmisor.SelectedValue = curso.Emisor.Id;

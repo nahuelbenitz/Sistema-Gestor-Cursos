@@ -173,6 +173,7 @@
             // txtUrlCertificado
             // 
             this.txtUrlCertificado.Location = new System.Drawing.Point(196, 266);
+            this.txtUrlCertificado.MaxLength = 1000;
             this.txtUrlCertificado.Name = "txtUrlCertificado";
             this.txtUrlCertificado.Size = new System.Drawing.Size(200, 20);
             this.txtUrlCertificado.TabIndex = 5;
