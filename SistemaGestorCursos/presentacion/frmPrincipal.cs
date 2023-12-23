@@ -28,11 +28,6 @@ namespace presentacion
             cboFiltro.Items.Add("Emisor");
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            CargarGrilla();
-        }
-
         private void CargarGrilla()
         {
             CursoNegocio negocio = new CursoNegocio();
@@ -98,7 +93,6 @@ namespace presentacion
         {
             CursoNegocio cursoNegocio = new CursoNegocio();
             Curso cursoSeleccionado;
-
             try
             {
                 DialogResult respuesta = MessageBox.Show("¿De verdad deseas eliminarlo?", "Eliminando", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
