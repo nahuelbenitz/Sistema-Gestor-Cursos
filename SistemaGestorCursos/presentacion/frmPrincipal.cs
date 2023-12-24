@@ -260,7 +260,6 @@ namespace presentacion
         private void btnResetear_Click(object sender, EventArgs e)
         {
             cboFiltro.SelectedIndex = 0;
-            OcultarOpcionesFiltro();
             CargarGrilla();
         }
     }
