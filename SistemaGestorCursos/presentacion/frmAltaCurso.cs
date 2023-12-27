@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using dominio;
 using negocio;
+using System.Configuration;
 
 
 namespace presentacion
@@ -16,15 +18,18 @@ namespace presentacion
     public partial class frmAltaCurso : Form
     {
         private Curso curso = null;
+        private OpenFileDialog archivo = null;
         public frmAltaCurso()
         {
             InitializeComponent();
+            lblTituloAoM.Text = "Agregar";
         }
         public frmAltaCurso(Curso curso)
         {
             InitializeComponent();
             this.curso = curso;
             Text = "Modificar Curso";
+            lblTituloAoM.Text = "Modificar";
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -40,15 +45,24 @@ namespace presentacion
                 if (curso == null)
                     curso = new Curso();
 
-                curso.Nombre = txtNombre.Text;
-                curso.Descripcion = txtDescripcion.Text;
-                curso.Estado = (Estado)cboEstado.SelectedItem;
-                curso.FechaFin = dtpFecha.Value;
-                curso.Categoria = (Categoria)cboCategoria.SelectedItem;
-                curso.UrlCertificado = txtUrlCertificado.Text;
-                curso.Emisor = (Emisor)cboEmisor.SelectedItem;
+                if(txtNombre.Text != "" && txtDescripcion.Text != "")
+                {
+                    curso.Nombre = txtNombre.Text;
+                    curso.Descripcion = txtDescripcion.Text;
+                    curso.Estado = (Estado)cboEstado.SelectedItem;
+                    curso.FechaFin = dtpFecha.Value;
+                    curso.Categoria = (Categoria)cboCategoria.SelectedItem;
+                    curso.UrlCertificado = txtUrlCertificado.Text;
+                    curso.Emisor = (Emisor)cboEmisor.SelectedItem;
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, complete todo los campos obligatorios (*)", "¡Atención!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                if(curso.Id != 0)
+
+                if (curso.Id != 0)
                 {
                     negocio.Modificar(curso);
                     MessageBox.Show("Modificado exitosamente!");
@@ -58,6 +72,9 @@ namespace presentacion
                     negocio.Agregar(curso);
                     MessageBox.Show("Agregado exitosamente!");
                 }
+
+                if(archivo != null && !(txtUrlCertificado.Text.ToUpper().Contains("HTTP")))
+                    File.Copy(archivo.FileName, ConfigurationManager.AppSettings["images-folder"] + archivo.SafeFileName);
 
                 Close();
             }
@@ -122,6 +139,17 @@ namespace presentacion
             }
         }
 
-     
+        private void btnAgregarImagen_Click(object sender, EventArgs e)
+        {
+            archivo = new OpenFileDialog();
+            archivo.Filter = ("jpg|*.jpg;|png|*.png");
+            if (archivo.ShowDialog() == DialogResult.OK)
+            {
+                txtUrlCertificado.Text = archivo.FileName;
+                CargarImagen(archivo.FileName);
+
+                //File.Copy(archivo.FileName, ConfigurationManager.AppSettings["images-folder"] + archivo.SafeFileName);
+            }
+        }
     }
 }

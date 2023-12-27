@@ -13,12 +13,18 @@ using System.Windows.Forms;
 
 namespace presentacion
 {
-    public partial class frmPrincipal : Form
+    public partial class frmCurso : Form
     {
         private List<Curso> listaCurso;
-        public frmPrincipal()
+        public frmCurso()
         {
             InitializeComponent();
+            
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            CargarGrilla();
             OcultarOpcionesFiltro(true);
             cboFiltro.Items.Add("");
             cboFiltro.Items.Add("Nombre");
@@ -26,6 +32,7 @@ namespace presentacion
             cboFiltro.Items.Add("Fecha");
             cboFiltro.Items.Add("Categoria");
             cboFiltro.Items.Add("Emisor");
+            dgvCursos.Rows[0].Selected = false;
         }
 
         private void CargarGrilla()
@@ -36,7 +43,8 @@ namespace presentacion
                 listaCurso = negocio.Listar();
                 dgvCursos.DataSource = listaCurso;
                 OcultarColumnas();
-                CargarImagen(listaCurso[0].UrlCertificado);
+                if(listaCurso.Count > 0)
+                    CargarImagen(listaCurso[0].UrlCertificado);
             }
             catch (Exception ex)
             {
@@ -52,7 +60,7 @@ namespace presentacion
         }
         private void dgvCursos_SelectionChanged(object sender, EventArgs e)
         {
-            if(dgvCursos.CurrentRow != null || dgvCursos.Rows.Count > 0)
+            if(dgvCursos.CurrentRow != null)
             {
                 Curso seleccionado = (Curso) dgvCursos.CurrentRow.DataBoundItem;
                 CargarImagen(seleccionado.UrlCertificado);
@@ -66,7 +74,7 @@ namespace presentacion
                 pbxCertificado.Load(image);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 pbxCertificado.Load("https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png");
             }
@@ -74,25 +82,65 @@ namespace presentacion
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            frmAltaCurso frmAltaCurso = new frmAltaCurso();
-            frmAltaCurso.ShowDialog();
-            CargarGrilla();
+            Agregar();
+        }
+
+        private void Agregar()
+        {
+            try
+            {
+                frmAltaCurso frmAltaCurso = new frmAltaCurso();
+                frmAltaCurso.ShowDialog();
+                CargarGrilla();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            Curso seleccionado;
-            seleccionado = (Curso)dgvCursos.CurrentRow.DataBoundItem;
+            if (dgvCursos.SelectedRows.Count > 0)
+            {
+                Modificar();
+            }
+            else
+                MessageBox.Show("Por favor, seleccione un curso", "¡Atención!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            frmAltaCurso frmModificarCurso = new frmAltaCurso(seleccionado);
-            frmModificarCurso.ShowDialog();
-            CargarGrilla();
+        }
+
+        private void Modificar()
+        {
+            Curso seleccionado;
+            try
+            {                
+                 seleccionado = (Curso)dgvCursos.CurrentRow.DataBoundItem;
+
+                 frmAltaCurso frmModificarCurso = new frmAltaCurso(seleccionado);
+                 frmModificarCurso.ShowDialog();
+                 CargarGrilla();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+            }
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
+            if (dgvCursos.SelectedRows.Count > 0)
+                Eliminar();
+            else
+                MessageBox.Show("Por favor, seleccione un curso", "¡Atención!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void Eliminar()
+        {
             CursoNegocio cursoNegocio = new CursoNegocio();
             Curso cursoSeleccionado;
+
             try
             {
                 DialogResult respuesta = MessageBox.Show("¿De verdad deseas eliminarlo?", "Eliminando", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -233,23 +281,24 @@ namespace presentacion
                     if (cboFiltro.SelectedItem.ToString() == "Estado")
                     {
                         columna = " est.descripcion ";
-                        condicion = $" like '%{cboFiltroFinal.SelectedItem.ToString()}%'";
+                        condicion = $" like '%{cboFiltroFinal.SelectedItem.ToString().TrimEnd()}%'";
                     }
                     else if (cboFiltro.SelectedItem.ToString() == "Categoria")
                     {
                         columna = " cate.Descripción ";
-                        condicion = $" like '%{cboFiltroFinal.SelectedItem.ToString()}%'";
+                        condicion = $" like '%{cboFiltroFinal.SelectedItem.ToString().TrimEnd()}%'";
                     }
                     else
                     {
                         columna = " emi.Descripción ";
-                        condicion = $" like '%{cboFiltroFinal.SelectedItem.ToString()}%'";
+                        condicion = $" like '%{cboFiltroFinal.SelectedItem.ToString().TrimEnd()}%'";
                     }
                 }
                 listaCurso = negocio.Filtrar(columna, condicion);
                 dgvCursos.DataSource = listaCurso;
                 OcultarColumnas();
-                CargarImagen(listaCurso[0].UrlCertificado);
+                if(listaCurso.Count > 0)
+                    CargarImagen(listaCurso[0].UrlCertificado);
             }
             catch (Exception ex)
             {
@@ -259,8 +308,56 @@ namespace presentacion
 
         private void btnResetear_Click(object sender, EventArgs e)
         {
+            OcultarOpcionesFiltro();
             cboFiltro.SelectedIndex = 0;
             CargarGrilla();
+        }
+
+        private void btnCambioColor_MouseEnter(object sender, EventArgs e)
+        {
+            var boton = (Button)sender;
+
+            boton.BackColor = Color.FromArgb(163, 21, 21);
+        }
+
+        private void btnVuelvoColor_MouseLeave(object sender, EventArgs e)
+        {
+            var boton = (Button)sender;
+
+            boton.BackColor = Color.FromArgb(47, 70, 148);
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnVerDetalle_Click(object sender, EventArgs e)
+        {
+
+            if (dgvCursos.SelectedRows.Count > 0)
+            {
+                VerDetalle();
+            }
+            else
+                MessageBox.Show("Por favor, seleccione un curso", "¡Atención!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void VerDetalle()
+        {
+            Curso seleccionado;
+            try
+            {
+                seleccionado = (Curso)dgvCursos.CurrentRow.DataBoundItem;
+
+                frmDetalle frmDetalle = new frmDetalle(seleccionado);
+                frmDetalle.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+
+            }
         }
     }
 }
