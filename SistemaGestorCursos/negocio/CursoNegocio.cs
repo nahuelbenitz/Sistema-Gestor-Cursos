@@ -13,8 +13,8 @@ namespace negocio
     {
         public List<Curso> Listar()
         {
-            List<Curso> lista = new List<Curso>();
-            AccesoDatos datos = new AccesoDatos();
+            var lista = new List<Curso>();
+            var datos = new AccesoDatos();
 
             try
             {
@@ -65,8 +65,8 @@ namespace negocio
 
         public List<Curso> Filtrar(string columna, string condicion)
         {
-            List<Curso> lista = new List<Curso>();
-            AccesoDatos datos = new AccesoDatos();
+            var lista = new List<Curso>();
+            var datos = new AccesoDatos();
 
             try
             {
@@ -121,7 +121,7 @@ namespace negocio
 
         public void Agregar(Curso curso)
         {
-            AccesoDatos datos = new AccesoDatos();
+            var datos = new AccesoDatos();
 
             try
             {
@@ -151,7 +151,7 @@ namespace negocio
 
         public void Modificar(Curso curso)
         {
-            AccesoDatos datos = new AccesoDatos();
+            var datos = new AccesoDatos();
             try
             {
                 datos.SetearConsulta(@"UPDATE Cursos SET Nombre = @nombre, Descripcion = @descripcion, FechaFin = @fechaFin, IdCategoria = @idCategoria,
@@ -181,7 +181,7 @@ namespace negocio
 
         public void Eliminar(int id)
         {
-            AccesoDatos datos = new AccesoDatos();
+            var datos = new AccesoDatos();
             try
             {
                 datos.SetearConsulta("UPDATE cursos set Activo = 0 where Id = @id");

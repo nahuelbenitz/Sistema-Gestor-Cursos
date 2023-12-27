@@ -37,7 +37,7 @@ namespace presentacion
 
         private void CargarGrilla()
         {
-            CursoNegocio negocio = new CursoNegocio();
+            var negocio = new CursoNegocio();
             try
             {
                 listaCurso = negocio.Listar();
@@ -62,7 +62,7 @@ namespace presentacion
         {
             if(dgvCursos.CurrentRow != null)
             {
-                Curso seleccionado = (Curso) dgvCursos.CurrentRow.DataBoundItem;
+                var seleccionado = (Curso) dgvCursos.CurrentRow.DataBoundItem;
                 CargarImagen(seleccionado.UrlCertificado);
             }
         }
@@ -89,7 +89,7 @@ namespace presentacion
         {
             try
             {
-                frmAltaCurso frmAltaCurso = new frmAltaCurso();
+                var frmAltaCurso = new frmAltaCurso();
                 frmAltaCurso.ShowDialog();
                 CargarGrilla();
             }
@@ -138,7 +138,7 @@ namespace presentacion
 
         private void Eliminar()
         {
-            CursoNegocio cursoNegocio = new CursoNegocio();
+            var cursoNegocio = new CursoNegocio();
             Curso cursoSeleccionado;
 
             try
@@ -209,9 +209,9 @@ namespace presentacion
 
         private void CargarCombosFiltro(string seleccion)
         {
-            CategoriaNegocio categoriaNegocio = new CategoriaNegocio();
-            EmisorNegocio emisorNegocio = new EmisorNegocio();
-            EstadoNegocio estadoNegocio = new EstadoNegocio();
+            var categoriaNegocio = new CategoriaNegocio();
+            var emisorNegocio = new EmisorNegocio();
+            var estadoNegocio = new EstadoNegocio();
             switch (seleccion)
             {
                 case "Estado":
@@ -254,7 +254,7 @@ namespace presentacion
 
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
-            CursoNegocio negocio = new CursoNegocio();
+            var negocio = new CursoNegocio();
             string columna = string.Empty;
             string condicion = string.Empty;
          
@@ -350,7 +350,7 @@ namespace presentacion
             {
                 seleccionado = (Curso)dgvCursos.CurrentRow.DataBoundItem;
 
-                frmDetalle frmDetalle = new frmDetalle(seleccionado);
+                var frmDetalle = new frmDetalle(seleccionado);
                 frmDetalle.ShowDialog();
             }
             catch (Exception ex)

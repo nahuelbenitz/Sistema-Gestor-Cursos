@@ -11,8 +11,8 @@ namespace negocio
     {
         public List<Estado> listar()
         {
-            List<Estado> lista = new List<Estado>();
-            AccesoDatos datos = new AccesoDatos();
+            var lista = new List<Estado>();
+            var datos = new AccesoDatos();
 
             try
             {
@@ -21,7 +21,7 @@ namespace negocio
 
                 while (datos.Lector.Read())
                 {
-                    Estado estado = new Estado();
+                    var estado = new Estado();
                     estado.Id = (int)datos.Lector["id"];
                     estado.Descripcion = (string)datos.Lector["descripcion"];
 

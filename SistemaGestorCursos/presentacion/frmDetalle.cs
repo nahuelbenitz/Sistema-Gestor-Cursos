@@ -29,9 +29,6 @@ namespace presentacion
 
         private void frmDetalle_Load(object sender, EventArgs e)
         {
-            CategoriaNegocio categoriaNegocio = new CategoriaNegocio();
-            EmisorNegocio emisorNegocio = new EmisorNegocio();
-            EstadoNegocio estadoNegocio = new EstadoNegocio();
             try
             {
                 if (curso != null)

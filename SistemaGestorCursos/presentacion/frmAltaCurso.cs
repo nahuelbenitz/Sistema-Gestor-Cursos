@@ -39,7 +39,7 @@ namespace presentacion
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            CursoNegocio negocio = new CursoNegocio();
+            var negocio = new CursoNegocio();
             try
             {
                 if (curso == null)
@@ -86,9 +86,9 @@ namespace presentacion
 
         private void frmAltaCurso_Load(object sender, EventArgs e)
         {
-            CategoriaNegocio categoriaNegocio = new CategoriaNegocio();
-            EmisorNegocio emisorNegocio = new EmisorNegocio();
-            EstadoNegocio estadoNegocio = new EstadoNegocio();
+            var categoriaNegocio = new CategoriaNegocio();
+            var emisorNegocio = new EmisorNegocio();
+            var estadoNegocio = new EstadoNegocio();
             try
             {
                 cboCategoria.DataSource = categoriaNegocio.listar();

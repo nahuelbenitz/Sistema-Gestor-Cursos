@@ -11,8 +11,8 @@ namespace negocio
     {
         public List<Emisor> listar()
         {
-            List<Emisor> lista = new List<Emisor>();
-            AccesoDatos datos = new AccesoDatos();
+            var lista = new List<Emisor>();
+            var datos = new AccesoDatos();
 
             try
             {
@@ -21,7 +21,7 @@ namespace negocio
 
                 while (datos.Lector.Read())
                 {
-                    Emisor emisor = new Emisor();
+                    var emisor = new Emisor();
                     emisor.Id = (int)datos.Lector["id"];
                     emisor.Descripcion = (string)datos.Lector["descripción"];
 
